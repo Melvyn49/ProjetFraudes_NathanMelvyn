@@ -1,6 +1,7 @@
 package fr.eseo.projet2.ihm;
 
 import fr.eseo.projet2.gestionnaire.GestionnaireFormulaires;
+import fr.eseo.projet2.modele.FraudeIAGConnectee;
 import fr.eseo.projet2.modele.Etudiant;
 import fr.eseo.projet2.modele.Formulaire;
 import fr.eseo.projet2.modele.Fraude;
@@ -80,9 +81,10 @@ public class InterfaceUtilisateur {
 
         System.out.println("\nQuel type de fraude a été constaté ?");
         System.out.println("1. Fraude classique (Papier)");
-        System.out.println("2. Fraude technologique (IA Générative)");
+        System.out.println("2. Fraude technologique (IA Générative hors-ligne)");
         System.out.println("3. Fraude technologique (Calculatrice)");
-        System.out.print("Votre choix (1, 2 ou 3) : ");
+        System.out.println("4. Fraude technologique (IA Connectée au réseau)");
+        System.out.print("Votre choix (1, 2, 3 ou 4) : ");
         String typeFraude = scanner.nextLine();
 
         switch (typeFraude) {
@@ -121,6 +123,28 @@ public class InterfaceUtilisateur {
                 System.out.println("-> Fraude calculatrice ajoutée au dossier avec succès !");
                 break;
 
+            case "4":
+                // NOUVEAU : Création d'une fraude IA avec accès réseau
+                System.out.print("Quel service en ligne a été interrogé ? (ex: API OpenAI, Claude) : ");
+                String service = scanner.nextLine();
+
+                System.out.print("Quelle était l'adresse IP de la connexion illicite ? (ex: 192.168.1.45) : ");
+                String ip = scanner.nextLine();
+
+                // On utilise les 5 paramètres de ton constructeur.
+                // On intègre ici la notion d'impact énergétique des requêtes massives pour donner plus de profondeur au scénario.
+                FraudeIAGConnectee fraudeReseau = new FraudeIAGConnectee(
+                        LocalDate.now(),
+                        "Connexion illicite à un serveur distant",
+                        "Requêtes massives générant une forte empreinte carbone",
+                        service,
+                        ip
+                );
+
+                nouveauFormulaire.ajouterFraude(fraudeReseau);
+                System.out.println("-> Fraude IA Connectée ajoutée au dossier avec succès !");
+                break;
+
             default:
                 System.out.println("Choix non reconnu. Le dossier a été créé sans fraude associée.");
                 break;
@@ -138,7 +162,7 @@ public class InterfaceUtilisateur {
     }
 
     /**
-     * @brief Parcour tous les formulaires pour afficher les étudiants et les fraudes en détail.
+     * @brief Parcour tous les formulaires pour afficher les étudiants et les fraudes en détail
      */
     private void afficherDetails() {
         System.out.println("\n DÉTAIL DES DOSSIERS DE FRAUDE :");
@@ -149,7 +173,7 @@ public class InterfaceUtilisateur {
         }
 
         for (Formulaire f : gestionnaire.getFormulaires()) {
-            System.out.println("\n" + f.toString());     //  mettre héritage !!!!
+            System.out.println("\n" + f.toString());       //  mettre héritage !!!!
 
             // On affiche tous les étudiants complices
             System.out.print("  Étudiants impliqués : ");

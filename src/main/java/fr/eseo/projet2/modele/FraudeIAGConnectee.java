@@ -1,5 +1,4 @@
 package fr.eseo.projet2.modele;
-
 import java.time.LocalDate;
 
 /**
