@@ -10,7 +10,6 @@ public class Main {
     public static void main(String[] args) {
         GestionnaireFormulaires gestionnaire = new GestionnaireFormulaires();
 
-        // C'est cette ligne qui manquait pour injecter les données !
         genererDonneesDeTest(gestionnaire);
 
         InterfaceUtilisateur ihm = new InterfaceUtilisateur(gestionnaire);
