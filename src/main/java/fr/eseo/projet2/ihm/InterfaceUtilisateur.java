@@ -31,7 +31,7 @@ public class InterfaceUtilisateur {
      * @brief Affiche le menu principal dans la console.
      */
     public void afficherMenu() {
-        System.out.println("=== GESTION DES FRAUDES ===");
+        System.out.println("GESTION DES FRAUDES");
         System.out.println("1. Ajouter un nouveau formulaire");
         System.out.println("2. Consulter les statistiques");
         System.out.println("3. Quitter l'application");
