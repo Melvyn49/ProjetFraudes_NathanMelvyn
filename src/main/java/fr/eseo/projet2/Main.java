@@ -29,6 +29,6 @@ public class Main {
         f1.ajouterFraude(fraude);
 
         gestionnaire.ajouterFormulaire(f1);
-        System.out.println("✅ [Système] Jeu de données de test chargé avec succès !");
+        System.out.println(" [Système] Jeu de données de test chargé avec succès !");
     }
 }
