@@ -37,8 +37,8 @@ public class GestionnaireFormulaires {
 
     /**
      * @brief Retire un formulaire via son identifiant unique.
-     * @param id L'identifiant du formulaire à supprimer.
-     * @return true si supprimé avec succès, false sinon.
+     * @param id L'identifiant du formulaire à supprimer
+     * @return true si supprimé avec succès, false sinon
      */
     public boolean retirerFormulaire(int id) {
         return this.formulaires.removeIf(f -> f.getId() == id);
