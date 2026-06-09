@@ -15,6 +15,7 @@ import fr.eseo.projet2.modele.FraudeCalculatrice;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
+import fr.eseo.projet2.graphe.GrapheFraude;
 
 public class InterfaceUtilisateur {
     private GestionnaireFormulaires gestionnaire;
@@ -44,12 +45,16 @@ public class InterfaceUtilisateur {
                 case "3":
                     afficherDetails();
                     break;
+                // MODIFICATION : Mise à jour des cas 4 et 5
                 case "4":
+                    afficherGraphe();
+                    break;
+                case "5":
                     System.out.println("\n Fermeture du programme ");
                     continuer = false;
                     break;
                 default:
-                    System.out.println("\n Erreur : Choix invalide. Veuillez taper 1, 2, 3 ou 4.");
+                    System.out.println("\n Erreur : Choix invalide. Veuillez taper 1, 2, 3, 4 ou 5.");
             }
         }
     }
@@ -59,7 +64,8 @@ public class InterfaceUtilisateur {
         System.out.println("1. Ajouter un nouveau formulaire");
         System.out.println("2. Consulter les statistiques");
         System.out.println("3. Afficher le détail des dossiers (Fraudes IA, etc.)");
-        System.out.println("4. Quitter l'application");
+        System.out.println("4. Afficher le réseau de plagiats (Graphe)");
+        System.out.println("5. Quitter l'application");
         System.out.print("Votre choix : ");
     }
 
@@ -180,5 +186,10 @@ public class InterfaceUtilisateur {
                 System.out.println("    - " + fraude.afficher());
             }
         }
+    }
+
+    private void afficherGraphe() {
+        GrapheFraude graphe = gestionnaire.construireGraphe();
+        graphe.afficher();
     }
 }

@@ -4,6 +4,8 @@ import fr.eseo.projet2.modele.Etudiant;
 import fr.eseo.projet2.modele.Formulaire;
 import java.util.ArrayList;
 import java.util.List;
+import fr.eseo.projet2.graphe.GrapheFraude;
+
 /*test*/
 /**
  * @class GestionnaireFormulaires
@@ -61,6 +63,17 @@ public class GestionnaireFormulaires {
     }
 
     public List<Formulaire> getFormulaires() {
+
         return formulaires;
+    }
+
+    /**
+     * @brief Construit et retourne le graphe des fraudes.
+     * @return Le graphe généré.
+     */
+    public GrapheFraude construireGraphe() {
+        GrapheFraude graphe = new GrapheFraude();
+        graphe.construire(this.formulaires);
+        return graphe;
     }
 }
