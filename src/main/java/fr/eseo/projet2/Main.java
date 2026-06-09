@@ -16,7 +16,7 @@ public class Main {
 
     private static void genererDonneesDeTest(GestionnaireFormulaires gestionnaire) {
 
-        // 2 épreuves de modalités différentes
+        // 2 epreuves de modalités différentes
         Epreuve epreuveJava = new Epreuve("JAVA-101", LocalDate.of(2026, 5, 18),
                 LocalTime.of(8, 0), 120, Modalite.SUR_ORDINATEUR);
         Epreuve epreuveMaths = new Epreuve("MATH-202", LocalDate.of(2026, 5, 20),
@@ -46,7 +46,7 @@ public class Main {
                 true
         ));
 
-        // Formulaire 2 : FraudeCalculatrice — e3 seul
+        // Formulaire 2 : FraudeCalculatrice e3 seul
         Formulaire f2 = new Formulaire(epreuveMaths);
         f2.ajouterEtudiant(e3);
         f2.ajouterFraude(new FraudeCalculatrice(
@@ -72,6 +72,9 @@ public class Main {
         gestionnaire.ajouterFormulaire(f1);
         gestionnaire.ajouterFormulaire(f2);
         gestionnaire.ajouterFormulaire(f3);
+
+        gestionnaire.ajouterEpreuve(epreuveJava);
+        gestionnaire.ajouterEpreuve(epreuveMaths);
 
         System.out.println("[Système] Jeu de données de test chargé avec succès !");
         System.out.println("  -> 2 épreuves, 4 étudiants, 3 formulaires, 4 types de fraude couverts.");

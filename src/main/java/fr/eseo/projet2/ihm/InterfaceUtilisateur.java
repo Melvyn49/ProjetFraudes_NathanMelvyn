@@ -45,16 +45,18 @@ public class InterfaceUtilisateur {
                 case "3":
                     afficherDetails();
                     break;
-                // MODIFICATION : Mise à jour des cas 4 et 5
                 case "4":
                     afficherGraphe();
                     break;
                 case "5":
+                    retirerFormulaireInteractif();
+                    break;
+                case "6":
                     System.out.println("\n Fermeture du programme ");
                     continuer = false;
                     break;
                 default:
-                    System.out.println("\n Erreur : Choix invalide. Veuillez taper 1, 2, 3, 4 ou 5.");
+                    System.out.println("\n Erreur : Choix invalide. Veuillez taper 1, 2, 3, 4, 5 ou 6.");
             }
         }
     }
@@ -65,7 +67,8 @@ public class InterfaceUtilisateur {
         System.out.println("2. Consulter les statistiques");
         System.out.println("3. Afficher le détail des dossiers (Fraudes IA, etc.)");
         System.out.println("4. Afficher le réseau de plagiats (Graphe)");
-        System.out.println("5. Quitter l'application");
+        System.out.println("5. Retirer un formulaire existant");
+        System.out.println("6. Quitter l'application");
         System.out.print("Votre choix : ");
     }
 
@@ -77,8 +80,24 @@ public class InterfaceUtilisateur {
         System.out.print("Prénom de l'étudiant : ");
         String prenom = scanner.nextLine();
 
-        Epreuve epreuveAujourdhui = new Epreuve("Examen", LocalDate.now(), LocalTime.of(14, 0), 120, Modalite.EXAMEN_ECRIT);
-        Formulaire nouveauFormulaire = new Formulaire(epreuveAujourdhui);
+        if (gestionnaire.getEpreuves().isEmpty()) {
+            System.out.println("\nErreur : Aucune épreuve disponible dans le système ! Impossible de créer un dossier.");
+            return; // On annule la création pour éviter les bugs
+        }
+
+        System.out.println("\nVeuillez sélectionner l'épreuve concernée :");
+        int index = 1;
+        for (Epreuve ep : gestionnaire.getEpreuves()) {
+            System.out.println(index + ". " + ep.getCodeECUE() + " (" + ep.getModalite() + " - " + ep.getDate() + ")");
+            index++;
+        }
+        System.out.print("Votre choix (numéro) : ");
+        int choixEpreuve = Integer.parseInt(scanner.nextLine());
+
+        // On récupère l'épreuve choisie par l'utilisateur (index - 1 car les listes commencent à 0)
+        Epreuve epreuveSelectionnee = gestionnaire.getEpreuves().get(choixEpreuve - 1);
+
+        Formulaire nouveauFormulaire = new Formulaire(epreuveSelectionnee);
 
         Etudiant nouvelEtudiant = new Etudiant(999, nom, prenom, Cursus.E3E);
         nouveauFormulaire.ajouterEtudiant(nouvelEtudiant);
@@ -177,7 +196,7 @@ public class InterfaceUtilisateur {
         for (Formulaire f : gestionnaire.getFormulaires()) {
             System.out.println("\n" + f.toString());       //  mettre héritage !!!!
 
-            // On affiche tous les étudiants complices
+            // On affiche tout les étudiants complices
             System.out.print("  Étudiants impliqués : ");
             for (Etudiant e : f.getEtudiants()) {
                 System.out.print(e.getPrenom() + " " + e.getNom() + " | ");
@@ -195,4 +214,31 @@ public class InterfaceUtilisateur {
         GrapheFraude graphe = gestionnaire.construireGraphe();
         graphe.afficher();
     }
+
+    private void retirerFormulaireInteractif() {
+        System.out.println("\nRETRAIT D'UN DOSSIER :");
+        if (gestionnaire.getFormulaires().isEmpty()) {
+            System.out.println("Aucun dossier enregistré pour le moment.");
+            return;
+        }
+
+        System.out.println("Liste des dossiers actuels :");
+        for (Formulaire f : gestionnaire.getFormulaires()) {
+            System.out.println("- ID: " + f.getId() + " | Épreuve: " + f.getEpreuve().getCodeECUE());
+        }
+
+        System.out.print("\nSaisissez l'ID du formulaire à retirer : ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+            boolean succes = gestionnaire.retirerFormulaire(id);
+            if (succes) {
+                System.out.println("-> Le formulaire " + id + " a été retiré avec succès.");
+            } else {
+                System.out.println("-> Erreur : Aucun formulaire trouvé avec cet identifiant.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("-> Erreur : Veuillez saisir un nombre valide.");
+        }
+    }
+
 }

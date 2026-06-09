@@ -39,6 +39,9 @@ public class Epreuve {
     public String getCodeECUE() { return codeECUE; }
     public Modalite getModalite() { return modalite; }
 
+    public LocalDate getDate() {
+        return date;
+    }
     @Override
     public String toString() {
         return codeECUE + " (" + modalite + ") le " + date;
