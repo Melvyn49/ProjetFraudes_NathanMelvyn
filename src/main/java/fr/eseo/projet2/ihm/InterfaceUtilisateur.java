@@ -14,7 +14,6 @@ import fr.eseo.projet2.modele.FraudeCalculatrice;
 import fr.eseo.projet2.stats.Statistiques;
 import fr.eseo.projet2.graphe.GrapheFraude;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,11 +51,14 @@ public class InterfaceUtilisateur {
                     afficherRechercheMenu();
                     break;
                 case "6":
+                    retirerFormulaireInteractif(); // L'appel manquait ici !
+                    break;
+                case "7":
                     System.out.println("\n Fermeture du programme ");
                     continuer = false;
                     break;
                 default:
-                    System.out.println("\n Erreur : Choix invalide. Veuillez taper 1, 2, 3, 4, 5 ou 6.");
+                    System.out.println("\n Erreur : Choix invalide. Veuillez taper un nombre entre 1 et 7.");
             }
         }
     }
@@ -68,7 +70,8 @@ public class InterfaceUtilisateur {
         System.out.println("3. Afficher le détail des dossiers");
         System.out.println("4. Afficher le réseau de plagiats (Graphe)");
         System.out.println("5. Rechercher");
-        System.out.println("6. Quitter l'application");
+        System.out.println("6. Retirer un formulaire existant");
+        System.out.println("7. Quitter l'application");
         System.out.print("Votre choix : ");
     }
 
@@ -80,8 +83,23 @@ public class InterfaceUtilisateur {
         System.out.print("Prénom de l'étudiant : ");
         String prenom = scanner.nextLine();
 
-        Epreuve epreuveAujourdhui = new Epreuve("Examen", LocalDate.now(), LocalTime.of(14, 0), 120, Modalite.EXAMEN_ECRIT);
-        Formulaire nouveauFormulaire = new Formulaire(epreuveAujourdhui);
+        // Réintégration de la vraie sélection d'épreuve qui avait été écrasée
+        if (gestionnaire.getEpreuves().isEmpty()) {
+            System.out.println("\nErreur : Aucune épreuve disponible dans le système ! Impossible de créer un dossier.");
+            return;
+        }
+
+        System.out.println("\nVeuillez sélectionner l'épreuve concernée :");
+        int index = 1;
+        for (Epreuve ep : gestionnaire.getEpreuves()) {
+            System.out.println(index + ". " + ep.getCodeECUE() + " (" + ep.getModalite() + " - " + ep.getDate() + ")");
+            index++;
+        }
+        System.out.print("Votre choix (numéro) : ");
+        int choixEpreuve = Integer.parseInt(scanner.nextLine());
+
+        Epreuve epreuveSelectionnee = gestionnaire.getEpreuves().get(choixEpreuve - 1);
+        Formulaire nouveauFormulaire = new Formulaire(epreuveSelectionnee);
 
         Etudiant nouvelEtudiant = new Etudiant(999, nom, prenom, Cursus.E3E);
         nouveauFormulaire.ajouterEtudiant(nouvelEtudiant);
@@ -194,7 +212,7 @@ public class InterfaceUtilisateur {
             case "1":
                 System.out.print("Numéro apprenant : ");
                 int numero = Integer.parseInt(scanner.nextLine());
-                List<Formulaire> parEtudiant = gestionnaire.getFormulairesParEtudiant(numero);
+                List<Formulaire> parEtudiant = gestionnaire.rechercherParEtudiant(numero);
                 if (parEtudiant.isEmpty()) {
                     System.out.println("Aucun formulaire trouvé pour ce numéro.");
                 } else {
@@ -205,7 +223,7 @@ public class InterfaceUtilisateur {
             case "2":
                 System.out.print("Code ECUE : ");
                 String code = scanner.nextLine();
-                List<Formulaire> parEpreuve = gestionnaire.getFormulairesParEpreuve(code);
+                List<Formulaire> parEpreuve = gestionnaire.rechercherParEpreuve(code);
                 if (parEpreuve.isEmpty()) {
                     System.out.println("Aucun formulaire trouvé pour cette épreuve.");
                 } else {
@@ -238,7 +256,7 @@ public class InterfaceUtilisateur {
             case "5":
                 System.out.print("Numéro apprenant : ");
                 int num = Integer.parseInt(scanner.nextLine());
-                Etudiant etudiant = gestionnaire.rechercherParNumero(num);
+                Etudiant etudiant = gestionnaire.rechercherParNumeroApprenant(num);
                 if (etudiant == null) {
                     System.out.println("Aucun étudiant trouvé avec ce numéro.");
                 } else {
@@ -248,6 +266,32 @@ public class InterfaceUtilisateur {
 
             default:
                 System.out.println("Choix non reconnu.");
+        }
+    }
+
+    private void retirerFormulaireInteractif() {
+        System.out.println("\n--- RETRAIT D'UN DOSSIER ---");
+        if (gestionnaire.getFormulaires().isEmpty()) {
+            System.out.println("Aucun dossier enregistré pour le moment.");
+            return;
+        }
+
+        System.out.println("Liste des dossiers actuels :");
+        for (Formulaire f : gestionnaire.getFormulaires()) {
+            System.out.println("- ID: " + f.getId() + " | Épreuve: " + f.getEpreuve().getCodeECUE());
+        }
+
+        System.out.print("\nSaisissez l'ID du formulaire à retirer : ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+            boolean succes = gestionnaire.retirerFormulaire(id);
+            if (succes) {
+                System.out.println("-> Le formulaire " + id + " a été retiré avec succès.");
+            } else {
+                System.out.println("-> Erreur : Aucun formulaire trouvé avec cet identifiant.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("-> Erreur : Veuillez saisir un nombre valide.");
         }
     }
 }
