@@ -77,3 +77,70 @@ public class GestionnaireFormulaires {
         return graphe;
     }
 }
+
+/**
+ * @brief Retourne tous les formulaires impliquant un étudiant donné.
+ * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
+ * @return La liste des formulaires correspondants.
+ */
+public List<Formulaire> getFormulairesParEtudiant(int numeroApprenant) {
+    List<Formulaire> resultat = new ArrayList<>();
+    for (Formulaire f : formulaires) {
+        for (Etudiant e : f.getEtudiants()) {
+            if (e.getNumeroApprenant() == numeroApprenant) {
+                resultat.add(f);
+                break;
+            }
+        }
+    }
+    return resultat;
+}
+
+/**
+ * @brief Retourne tous les formulaires concernant une épreuve donnée.
+ * @param codeECUE Le code de l'épreuve recherchée.
+ * @return La liste des formulaires correspondants.
+ */
+public List<Formulaire> getFormulairesParEpreuve(String codeECUE) {
+    List<Formulaire> resultat = new ArrayList<>();
+    for (Formulaire f : formulaires) {
+        if (f.getEpreuve() != null && f.getEpreuve().getCodeECUE().equals(codeECUE)) {
+            resultat.add(f);
+        }
+    }
+    return resultat;
+}
+
+/**
+ * @brief Recherche des étudiants par nom (insensible à la casse).
+ * @param nom Le nom à rechercher.
+ * @return La liste des étudiants correspondants.
+ */
+public List<Etudiant> rechercherParNom(String nom) {
+    List<Etudiant> resultat = new ArrayList<>();
+    for (Formulaire f : formulaires) {
+        for (Etudiant e : f.getEtudiants()) {
+            if (e.getNom().equalsIgnoreCase(nom) && !resultat.contains(e)) {
+                resultat.add(e);
+            }
+        }
+    }
+    return resultat;
+}
+
+/**
+ * @brief Recherche des étudiants par prénom (insensible à la casse).
+ * @param prenom Le prénom à rechercher.
+ * @return La liste des étudiants correspondants.
+ */
+public List<Etudiant> rechercherParPrenom(String prenom) {
+    List<Etudiant> resultat = new ArrayList<>();
+    for (Formulaire f : formulaires) {
+        for (Etudiant e : f.getEtudiants()) {
+            if (e.getPrenom().equalsIgnoreCase(prenom) && !resultat.contains(e)) {
+                resultat.add(e);
+            }
+        }
+    }
+    return resultat;
+}

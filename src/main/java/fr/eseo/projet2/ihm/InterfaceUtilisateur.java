@@ -156,8 +156,11 @@ public class InterfaceUtilisateur {
     private void afficherStatistiques() {
         System.out.println("\n STATISTIQUES DES FRAUDES ");
         Statistiques stats = new Statistiques(gestionnaire);
-        System.out.println("Nombre total de fraudes : " + stats.calculerTotalFraudes());
-        System.out.println("Moyenne de fraudes par formulaire : " + stats.calculerMoyenneFraudesParFormulaire());
+        System.out.println("Nombre de formulaires      : " + stats.getNbFormulaires());
+        System.out.println("Étudiants distincts        : " + stats.getNbEtudiantsDistinct());
+        System.out.println("Total fraudes              : " + stats.calculerTotalFraudes());
+        System.out.println("Moyenne fraudes/formulaire : " + stats.calculerMoyenneFraudesParFormulaire());
+        System.out.println("Écart-type                 : " + stats.calculerEcartType());
     }
 
     /**
