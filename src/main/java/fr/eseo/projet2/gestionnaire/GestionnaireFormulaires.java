@@ -2,11 +2,10 @@ package fr.eseo.projet2.gestionnaire;
 
 import fr.eseo.projet2.modele.Etudiant;
 import fr.eseo.projet2.modele.Formulaire;
+import fr.eseo.projet2.graphe.GrapheFraude;
 import java.util.ArrayList;
 import java.util.List;
-import fr.eseo.projet2.graphe.GrapheFraude;
 
-/*test*/
 /**
  * @class GestionnaireFormulaires
  * @brief Gère la liste centrale des formulaires de fraude.
@@ -14,9 +13,7 @@ import fr.eseo.projet2.graphe.GrapheFraude;
 public class GestionnaireFormulaires {
     private List<Formulaire> formulaires;
 
-    /**
-     * @brief Constructeur par défaut.
-     */
+    /** @brief Constructeur par défaut. */
     public GestionnaireFormulaires() {
         this.formulaires = new ArrayList<>();
     }
@@ -39,15 +36,15 @@ public class GestionnaireFormulaires {
 
     /**
      * @brief Retire un formulaire via son identifiant unique.
-     * @param id L'identifiant du formulaire à supprimer
-     * @return true si supprimé avec succès, false sinon
+     * @param id L'identifiant du formulaire à supprimer.
+     * @return true si supprimé avec succès, false sinon.
      */
     public boolean retirerFormulaire(int id) {
         return this.formulaires.removeIf(f -> f.getId() == id);
     }
 
     /**
-     * @brief Recherche un étudiant impliqué dans les fraudes par son numéro.
+     * @brief Recherche un étudiant par son numéro apprenant.
      * @param numero Le numéro apprenant de l'étudiant.
      * @return L'objet Etudiant s'il est trouvé, null sinon.
      */
@@ -62,8 +59,78 @@ public class GestionnaireFormulaires {
         return null;
     }
 
-    public List<Formulaire> getFormulaires() {
+    /**
+     * @brief Retourne tous les formulaires impliquant un étudiant donné.
+     * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
+     * @return La liste des formulaires correspondants.
+     */
+    public List<Formulaire> getFormulairesParEtudiant(int numeroApprenant) {
+        List<Formulaire> resultat = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            for (Etudiant e : f.getEtudiants()) {
+                if (e.getNumeroApprenant() == numeroApprenant) {
+                    resultat.add(f);
+                    break;
+                }
+            }
+        }
+        return resultat;
+    }
 
+    /**
+     * @brief Retourne tous les formulaires concernant une épreuve donnée.
+     * @param codeECUE Le code de l'épreuve recherchée.
+     * @return La liste des formulaires correspondants.
+     */
+    public List<Formulaire> getFormulairesParEpreuve(String codeECUE) {
+        List<Formulaire> resultat = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            if (f.getEpreuve() != null && f.getEpreuve().getCodeECUE().equals(codeECUE)) {
+                resultat.add(f);
+            }
+        }
+        return resultat;
+    }
+
+    /**
+     * @brief Recherche des étudiants par nom (insensible à la casse).
+     * @param nom Le nom à rechercher.
+     * @return La liste des étudiants correspondants.
+     */
+    public List<Etudiant> rechercherParNom(String nom) {
+        List<Etudiant> resultat = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            for (Etudiant e : f.getEtudiants()) {
+                if (e.getNom().equalsIgnoreCase(nom) && !resultat.contains(e)) {
+                    resultat.add(e);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    /**
+     * @brief Recherche des étudiants par prénom (insensible à la casse).
+     * @param prenom Le prénom à rechercher.
+     * @return La liste des étudiants correspondants.
+     */
+    public List<Etudiant> rechercherParPrenom(String prenom) {
+        List<Etudiant> resultat = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            for (Etudiant e : f.getEtudiants()) {
+                if (e.getPrenom().equalsIgnoreCase(prenom) && !resultat.contains(e)) {
+                    resultat.add(e);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    /**
+     * @brief Retourne la liste de tous les formulaires.
+     * @return La liste des formulaires.
+     */
+    public List<Formulaire> getFormulaires() {
         return formulaires;
     }
 
@@ -76,71 +143,4 @@ public class GestionnaireFormulaires {
         graphe.construire(this.formulaires);
         return graphe;
     }
-}
-
-/**
- * @brief Retourne tous les formulaires impliquant un étudiant donné.
- * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
- * @return La liste des formulaires correspondants.
- */
-public List<Formulaire> getFormulairesParEtudiant(int numeroApprenant) {
-    List<Formulaire> resultat = new ArrayList<>();
-    for (Formulaire f : formulaires) {
-        for (Etudiant e : f.getEtudiants()) {
-            if (e.getNumeroApprenant() == numeroApprenant) {
-                resultat.add(f);
-                break;
-            }
-        }
-    }
-    return resultat;
-}
-
-/**
- * @brief Retourne tous les formulaires concernant une épreuve donnée.
- * @param codeECUE Le code de l'épreuve recherchée.
- * @return La liste des formulaires correspondants.
- */
-public List<Formulaire> getFormulairesParEpreuve(String codeECUE) {
-    List<Formulaire> resultat = new ArrayList<>();
-    for (Formulaire f : formulaires) {
-        if (f.getEpreuve() != null && f.getEpreuve().getCodeECUE().equals(codeECUE)) {
-            resultat.add(f);
-        }
-    }
-    return resultat;
-}
-
-/**
- * @brief Recherche des étudiants par nom (insensible à la casse).
- * @param nom Le nom à rechercher.
- * @return La liste des étudiants correspondants.
- */
-public List<Etudiant> rechercherParNom(String nom) {
-    List<Etudiant> resultat = new ArrayList<>();
-    for (Formulaire f : formulaires) {
-        for (Etudiant e : f.getEtudiants()) {
-            if (e.getNom().equalsIgnoreCase(nom) && !resultat.contains(e)) {
-                resultat.add(e);
-            }
-        }
-    }
-    return resultat;
-}
-
-/**
- * @brief Recherche des étudiants par prénom (insensible à la casse).
- * @param prenom Le prénom à rechercher.
- * @return La liste des étudiants correspondants.
- */
-public List<Etudiant> rechercherParPrenom(String prenom) {
-    List<Etudiant> resultat = new ArrayList<>();
-    for (Formulaire f : formulaires) {
-        for (Etudiant e : f.getEtudiants()) {
-            if (e.getPrenom().equalsIgnoreCase(prenom) && !resultat.contains(e)) {
-                resultat.add(e);
-            }
-        }
-    }
-    return resultat;
 }
