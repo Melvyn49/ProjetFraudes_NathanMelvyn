@@ -36,7 +36,6 @@ public class InterfaceUtilisateur {
 
             switch (choix) {
                 case "1":
-                    // MODIFICATION : On appelle la méthode au lieu du texte statique
                     creerFormulaireInteractif();
                     break;
                 case "2":
@@ -64,7 +63,6 @@ public class InterfaceUtilisateur {
         System.out.print("Votre choix : ");
     }
 
-    // NOUVEAU : La méthode complète avec un sous-menu pour choisir n'importe quel type de fraude
     private void creerFormulaireInteractif() {
         System.out.println("\n--- CRÉATION D'UN NOUVEAU DOSSIER ---");
 
@@ -89,7 +87,6 @@ public class InterfaceUtilisateur {
 
         switch (typeFraude) {
             case "1":
-                // Saisie sur mesure pour le PAPIER
                 System.out.print("Quelles sont les dimensions de l'antisèche ? (ex: 5x5 cm) : ");
                 String dimensions = scanner.nextLine();
                 System.out.print("Le papier était-il plié ? (oui/non) : ");
@@ -101,7 +98,6 @@ public class InterfaceUtilisateur {
                 break;
 
             case "2":
-                // Saisie sur mesure pour l'IA
                 System.out.print("Quel modèle génératif a été utilisé ? (ex: Gemini, ChatGPT) : ");
                 String modele = scanner.nextLine();
 
@@ -124,15 +120,12 @@ public class InterfaceUtilisateur {
                 break;
 
             case "4":
-                // NOUVEAU : Création d'une fraude IA avec accès réseau
                 System.out.print("Quel service en ligne a été interrogé ? (ex: API OpenAI, Claude) : ");
                 String service = scanner.nextLine();
 
                 System.out.print("Quelle était l'adresse IP de la connexion illicite ? (ex: 192.168.1.45) : ");
                 String ip = scanner.nextLine();
 
-                // On utilise les 5 paramètres de ton constructeur.
-                // On intègre ici la notion d'impact énergétique des requêtes massives pour donner plus de profondeur au scénario.
                 FraudeIAGConnectee fraudeReseau = new FraudeIAGConnectee(
                         LocalDate.now(),
                         "Connexion illicite à un serveur distant",
@@ -162,7 +155,7 @@ public class InterfaceUtilisateur {
     }
 
     /**
-     * @brief Parcour tous les formulaires pour afficher les étudiants et les fraudes en détail
+     * @brief Parcourt tous les formulaires pour afficher les étudiants et les fraudes en détail
      */
     private void afficherDetails() {
         System.out.println("\n DÉTAIL DES DOSSIERS DE FRAUDE :");
