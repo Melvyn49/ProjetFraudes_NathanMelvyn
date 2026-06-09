@@ -10,12 +10,13 @@ import fr.eseo.projet2.modele.Cursus;
 import fr.eseo.projet2.modele.Modalite;
 import fr.eseo.projet2.modele.FraudeIAG;
 import fr.eseo.projet2.modele.FraudePapier;
-import fr.eseo.projet2.stats.Statistiques;
 import fr.eseo.projet2.modele.FraudeCalculatrice;
+import fr.eseo.projet2.stats.Statistiques;
+import fr.eseo.projet2.graphe.GrapheFraude;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Scanner;
-import fr.eseo.projet2.graphe.GrapheFraude;
 
 public class InterfaceUtilisateur {
     private GestionnaireFormulaires gestionnaire;
@@ -28,7 +29,6 @@ public class InterfaceUtilisateur {
 
     public void demarrer() {
         boolean continuer = true;
-
         System.out.println(" BIENVENUE - GESTION DES FRAUDES ");
 
         while (continuer) {
@@ -49,7 +49,7 @@ public class InterfaceUtilisateur {
                     afficherGraphe();
                     break;
                 case "5":
-                    retirerFormulaireInteractif();
+                    afficherRechercheMenu();
                     break;
                 case "6":
                     System.out.println("\n Fermeture du programme ");
@@ -65,9 +65,9 @@ public class InterfaceUtilisateur {
         System.out.println("\nQue souhaitez-vous faire ?");
         System.out.println("1. Ajouter un nouveau formulaire");
         System.out.println("2. Consulter les statistiques");
-        System.out.println("3. Afficher le détail des dossiers (Fraudes IA, etc.)");
+        System.out.println("3. Afficher le détail des dossiers");
         System.out.println("4. Afficher le réseau de plagiats (Graphe)");
-        System.out.println("5. Retirer un formulaire existant");
+        System.out.println("5. Rechercher");
         System.out.println("6. Quitter l'application");
         System.out.print("Votre choix : ");
     }
@@ -80,24 +80,8 @@ public class InterfaceUtilisateur {
         System.out.print("Prénom de l'étudiant : ");
         String prenom = scanner.nextLine();
 
-        if (gestionnaire.getEpreuves().isEmpty()) {
-            System.out.println("\nErreur : Aucune épreuve disponible dans le système ! Impossible de créer un dossier.");
-            return; // On annule la création pour éviter les bugs
-        }
-
-        System.out.println("\nVeuillez sélectionner l'épreuve concernée :");
-        int index = 1;
-        for (Epreuve ep : gestionnaire.getEpreuves()) {
-            System.out.println(index + ". " + ep.getCodeECUE() + " (" + ep.getModalite() + " - " + ep.getDate() + ")");
-            index++;
-        }
-        System.out.print("Votre choix (numéro) : ");
-        int choixEpreuve = Integer.parseInt(scanner.nextLine());
-
-        // On récupère l'épreuve choisie par l'utilisateur (index - 1 car les listes commencent à 0)
-        Epreuve epreuveSelectionnee = gestionnaire.getEpreuves().get(choixEpreuve - 1);
-
-        Formulaire nouveauFormulaire = new Formulaire(epreuveSelectionnee);
+        Epreuve epreuveAujourdhui = new Epreuve("Examen", LocalDate.now(), LocalTime.of(14, 0), 120, Modalite.EXAMEN_ECRIT);
+        Formulaire nouveauFormulaire = new Formulaire(epreuveAujourdhui);
 
         Etudiant nouvelEtudiant = new Etudiant(999, nom, prenom, Cursus.E3E);
         nouveauFormulaire.ajouterEtudiant(nouvelEtudiant);
@@ -116,50 +100,32 @@ public class InterfaceUtilisateur {
                 String dimensions = scanner.nextLine();
                 System.out.print("Le papier était-il plié ? (oui/non) : ");
                 boolean estPlie = scanner.nextLine().equalsIgnoreCase("oui");
-
-                FraudePapier fraudePapier = new FraudePapier(LocalDate.now(), "Antisèche papier", "Document caché", dimensions, estPlie);
-                nouveauFormulaire.ajouterFraude(fraudePapier);
+                nouveauFormulaire.ajouterFraude(new FraudePapier(LocalDate.now(), "Antisèche papier", "Document caché", dimensions, estPlie));
                 System.out.println("-> Fraude papier ajoutée au dossier.");
                 break;
 
             case "2":
                 System.out.print("Quel modèle génératif a été utilisé ? (ex: Gemini, ChatGPT) : ");
                 String modele = scanner.nextLine();
-
-                FraudeIAG fraudeIA = new FraudeIAG(LocalDate.now(), "Utilisation d'IA", "Contenu généré", modele);
-                nouveauFormulaire.ajouterFraude(fraudeIA);
+                nouveauFormulaire.ajouterFraude(new FraudeIAG(LocalDate.now(), "Utilisation d'IA", "Contenu généré", modele));
                 System.out.println("-> Fraude IA ajoutée au dossier.");
                 break;
 
             case "3":
                 System.out.print("Quelle est la marque de la calculatrice ? : ");
                 String marque = scanner.nextLine();
-
-                System.out.print("Quel est le nom du programme intégrer dedans ? : ");
+                System.out.print("Quel est le nom du programme intégré dedans ? : ");
                 String programme = scanner.nextLine();
-
-                FraudeCalculatrice fraudeCalc = new FraudeCalculatrice(LocalDate.now(), "Anti-sèche calculatrice", "Formules masquées dans la mémoire", marque, programme);
-
-                nouveauFormulaire.ajouterFraude(fraudeCalc);
+                nouveauFormulaire.ajouterFraude(new FraudeCalculatrice(LocalDate.now(), "Antisèche calculatrice", "Formules masquées dans la mémoire", marque, programme));
                 System.out.println("-> Fraude calculatrice ajoutée au dossier avec succès !");
                 break;
 
             case "4":
                 System.out.print("Quel service en ligne a été interrogé ? (ex: API OpenAI, Claude) : ");
                 String service = scanner.nextLine();
-
                 System.out.print("Quelle était l'adresse IP de la connexion illicite ? (ex: 192.168.1.45) : ");
                 String ip = scanner.nextLine();
-
-                FraudeIAGConnectee fraudeReseau = new FraudeIAGConnectee(
-                        LocalDate.now(),
-                        "Connexion illicite à un serveur distant",
-                        "Requêtes massives générant une forte empreinte carbone",
-                        service,
-                        ip
-                );
-
-                nouveauFormulaire.ajouterFraude(fraudeReseau);
+                nouveauFormulaire.ajouterFraude(new FraudeIAGConnectee(LocalDate.now(), "Connexion illicite à un serveur distant", "Requêtes envoyées via API externe", service, ip));
                 System.out.println("-> Fraude IA Connectée ajoutée au dossier avec succès !");
                 break;
 
@@ -183,7 +149,7 @@ public class InterfaceUtilisateur {
     }
 
     /**
-     * @brief Parcourt tous les formulaires pour afficher les étudiants et les fraudes en détail
+     * @brief Parcourt tous les formulaires pour afficher les étudiants et les fraudes en détail.
      */
     private void afficherDetails() {
         System.out.println("\n DÉTAIL DES DOSSIERS DE FRAUDE :");
@@ -194,9 +160,8 @@ public class InterfaceUtilisateur {
         }
 
         for (Formulaire f : gestionnaire.getFormulaires()) {
-            System.out.println("\n" + f.toString());       //  mettre héritage !!!!
+            System.out.println("\n" + f.toString());
 
-            // On affiche tout les étudiants complices
             System.out.print("  Étudiants impliqués : ");
             for (Etudiant e : f.getEtudiants()) {
                 System.out.print(e.getPrenom() + " " + e.getNom() + " | ");
@@ -215,30 +180,74 @@ public class InterfaceUtilisateur {
         graphe.afficher();
     }
 
-    private void retirerFormulaireInteractif() {
-        System.out.println("\nRETRAIT D'UN DOSSIER :");
-        if (gestionnaire.getFormulaires().isEmpty()) {
-            System.out.println("Aucun dossier enregistré pour le moment.");
-            return;
-        }
+    private void afficherRechercheMenu() {
+        System.out.println("\n--- RECHERCHE ---");
+        System.out.println("1. Formulaires d'un étudiant (par numéro apprenant)");
+        System.out.println("2. Formulaires d'une épreuve (par code ECUE)");
+        System.out.println("3. Étudiant par nom");
+        System.out.println("4. Étudiant par prénom");
+        System.out.println("5. Étudiant par numéro apprenant");
+        System.out.print("Votre choix : ");
+        String choix = scanner.nextLine();
 
-        System.out.println("Liste des dossiers actuels :");
-        for (Formulaire f : gestionnaire.getFormulaires()) {
-            System.out.println("- ID: " + f.getId() + " | Épreuve: " + f.getEpreuve().getCodeECUE());
-        }
+        switch (choix) {
+            case "1":
+                System.out.print("Numéro apprenant : ");
+                int numero = Integer.parseInt(scanner.nextLine());
+                List<Formulaire> parEtudiant = gestionnaire.getFormulairesParEtudiant(numero);
+                if (parEtudiant.isEmpty()) {
+                    System.out.println("Aucun formulaire trouvé pour ce numéro.");
+                } else {
+                    for (Formulaire f : parEtudiant) System.out.println("  " + f);
+                }
+                break;
 
-        System.out.print("\nSaisissez l'ID du formulaire à retirer : ");
-        try {
-            int id = Integer.parseInt(scanner.nextLine());
-            boolean succes = gestionnaire.retirerFormulaire(id);
-            if (succes) {
-                System.out.println("-> Le formulaire " + id + " a été retiré avec succès.");
-            } else {
-                System.out.println("-> Erreur : Aucun formulaire trouvé avec cet identifiant.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("-> Erreur : Veuillez saisir un nombre valide.");
+            case "2":
+                System.out.print("Code ECUE : ");
+                String code = scanner.nextLine();
+                List<Formulaire> parEpreuve = gestionnaire.getFormulairesParEpreuve(code);
+                if (parEpreuve.isEmpty()) {
+                    System.out.println("Aucun formulaire trouvé pour cette épreuve.");
+                } else {
+                    for (Formulaire f : parEpreuve) System.out.println("  " + f);
+                }
+                break;
+
+            case "3":
+                System.out.print("Nom à rechercher : ");
+                String nom = scanner.nextLine();
+                List<Etudiant> parNom = gestionnaire.rechercherParNom(nom);
+                if (parNom.isEmpty()) {
+                    System.out.println("Aucun étudiant trouvé avec ce nom.");
+                } else {
+                    for (Etudiant e : parNom) System.out.println("  " + e);
+                }
+                break;
+
+            case "4":
+                System.out.print("Prénom à rechercher : ");
+                String prenom = scanner.nextLine();
+                List<Etudiant> parPrenom = gestionnaire.rechercherParPrenom(prenom);
+                if (parPrenom.isEmpty()) {
+                    System.out.println("Aucun étudiant trouvé avec ce prénom.");
+                } else {
+                    for (Etudiant e : parPrenom) System.out.println("  " + e);
+                }
+                break;
+
+            case "5":
+                System.out.print("Numéro apprenant : ");
+                int num = Integer.parseInt(scanner.nextLine());
+                Etudiant etudiant = gestionnaire.rechercherParNumero(num);
+                if (etudiant == null) {
+                    System.out.println("Aucun étudiant trouvé avec ce numéro.");
+                } else {
+                    System.out.println("  " + etudiant);
+                }
+                break;
+
+            default:
+                System.out.println("Choix non reconnu.");
         }
     }
-
 }
