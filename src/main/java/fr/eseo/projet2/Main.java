@@ -23,10 +23,10 @@ public class Main {
                 LocalTime.of(14, 0), 90, Modalite.EXAMEN_ECRIT);
 
         // 4 étudiants de cursus différents
-        Etudiant e1 = new Etudiant(101, "Mézière",  "Jonas",   Cursus.E3E);
-        Etudiant e2 = new Etudiant(102, "Robin",    "Line",    Cursus.E3A);
-        Etudiant e3 = new Etudiant(103, "Caillaud",   "Mathis",    Cursus.E2);
-        Etudiant e4 = new Etudiant(104, "Monfils",  "Gael", Cursus.E1);
+        Etudiant e1 = new Etudiant(101, "Mézière",   "Jonas",   Cursus.E3E);
+        Etudiant e2 = new Etudiant(102, "Robin",     "Line",    Cursus.E3A);
+        Etudiant e3 = new Etudiant(103, "Caillaud",  "Mathis",  Cursus.E2);
+        Etudiant e4 = new Etudiant(104, "Monfils",   "Gael",    Cursus.E1);
 
         // Formulaire 1 : FraudeIAG + FraudePapier — lien de plagiat e1 <-> e2
         Formulaire f1 = new Formulaire(epreuveJava);
