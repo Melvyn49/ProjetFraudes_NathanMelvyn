@@ -29,9 +29,17 @@ public abstract class Fraude {
         this.contenu = contenu;
     }
 
-    public LocalDate getDateReleve() { return dateReleve; }
-    public String getDescription() { return description; }
-    public String getContenu() { return contenu; }
+    public LocalDate getDateReleve() {
+        return dateReleve;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getContenu() {
+        return contenu;
+    }
 
     /**
      * @brief Méthode abstraite pour forcer l'affichage spécifique aux classes filles.

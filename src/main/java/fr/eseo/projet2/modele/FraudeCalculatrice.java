@@ -20,8 +20,13 @@ public class FraudeCalculatrice extends Fraude {
         this.programme = programme;
     }
 
-    public String getMarque() { return marque; }
-    public String getProgramme() { return programme; }
+    public String getMarque() {
+        return marque;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
 
     @Override
     public String afficher() {

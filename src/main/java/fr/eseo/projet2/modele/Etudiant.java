@@ -33,10 +33,21 @@ public class Etudiant {
         this.cursus = cursus;
     }
 
-    public int getNumeroApprenant() { return numeroApprenant; }
-    public String getNom() { return nom; }
-    public String getPrenom() { return prenom; }
-    public Cursus getCursus() { return cursus; }
+    public int getNumeroApprenant() {
+        return numeroApprenant;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public Cursus getCursus() {
+        return cursus;
+    }
 
     /**
      * @brief Redéfinition de equals basée sur le numéro apprenant (unique).

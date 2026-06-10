@@ -28,7 +28,9 @@ public class FraudeIAG extends Fraude {
         this.nomService = nomService;
     }
 
-    public String getNomService() { return nomService; }
+    public String getNomService() {
+        return nomService;
+    }
 
     @Override
     public String afficher() {

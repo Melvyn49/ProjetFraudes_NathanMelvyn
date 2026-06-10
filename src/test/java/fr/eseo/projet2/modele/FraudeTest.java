@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FraudeTest {
 
-    // --- FraudeIAG ---
 
     @Test
     void testCreationFraudeIAG() {
@@ -19,13 +18,14 @@ class FraudeTest {
         assertTrue(fraude.afficher().contains("Gemini"));
     }
 
+
     @Test
     void testAfficherFraudeIAGContientContenu() {
         FraudeIAG fraude = new FraudeIAG(LocalDate.now(), "desc", "contenu_test", "ChatGPT");
+
         assertTrue(fraude.afficher().contains("contenu_test"));
     }
 
-    // --- FraudePapier ---
 
     @Test
     void testCreationFraudePapier() {
@@ -38,18 +38,18 @@ class FraudeTest {
         assertTrue(fraude.afficher().contains("10x5 cm"));
     }
 
+
     @Test
     void testFraudePapierNonPliee() {
         FraudePapier fraude = new FraudePapier(LocalDate.now(), "desc", "contenu", "5x5", false);
+
         assertFalse(fraude.isPile());
     }
 
-    // --- FraudeCalculatrice ---
 
     @Test
     void testCreationFraudeCalculatrice() {
-        FraudeCalculatrice fraude = new FraudeCalculatrice(
-                LocalDate.now(), "Programme", "Formules", "Casio", "ResolEquation.exe");
+        FraudeCalculatrice fraude = new FraudeCalculatrice(LocalDate.now(), "Programme", "Formules", "Casio", "ResolEquation.exe");
 
         assertEquals("Casio", fraude.getMarque());
         assertEquals("ResolEquation.exe", fraude.getProgramme());
@@ -57,18 +57,17 @@ class FraudeTest {
         assertTrue(fraude.afficher().contains("ResolEquation.exe"));
     }
 
-    // --- FraudeIAGConnectee ---
 
     @Test
     void testCreationFraudeIAGConnectee() {
-        FraudeIAGConnectee fraude = new FraudeIAGConnectee(
-                LocalDate.now(), "Connexion", "Requêtes", "Claude", "192.168.1.77");
+        FraudeIAGConnectee fraude = new FraudeIAGConnectee(LocalDate.now(), "Connexion", "Requêtes", "Claude", "192.168.1.77");
 
         assertEquals("Claude", fraude.getNomService());
         assertEquals("192.168.1.77", fraude.getAdresseIP());
         assertTrue(fraude.afficher().contains("192.168.1.77"));
         assertTrue(fraude.afficher().contains("Claude"));
     }
+
 
     @Test
     void testFraudeIAGConnecteeHeriteDeIAG() {
@@ -79,7 +78,6 @@ class FraudeTest {
         assertInstanceOf(Fraude.class, fraude);
     }
 
-    // --- Constructeurs par défaut ---
 
     @Test
     void testConstructeursParDefaut() {

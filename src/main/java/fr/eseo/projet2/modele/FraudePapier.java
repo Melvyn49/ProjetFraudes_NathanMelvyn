@@ -20,8 +20,12 @@ public class FraudePapier extends Fraude {
         this.pile = pile;
     }
 
-    public String getDimensions() { return dimensions; }
-    public boolean isPile() { return pile; }
+    public String getDimensions() {
+        return dimensions;
+    }
+    public boolean isPile() {
+        return pile;
+    }
 
     @Override
     public String afficher() {

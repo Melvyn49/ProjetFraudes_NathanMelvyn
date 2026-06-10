@@ -17,7 +17,9 @@ public class FraudeIAGConnectee extends FraudeIAG {
         this.adresseIP = adresseIP;
     }
 
-    public String getAdresseIP() { return adresseIP; }
+    public String getAdresseIP() {
+        return adresseIP;
+    }
 
     @Override
     public String afficher() {

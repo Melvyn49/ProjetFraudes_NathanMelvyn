@@ -20,12 +20,12 @@ public class StatistiquesTest {
         stats = new Statistiques(gestionnaire);
     }
 
-    // --- calculerTotalFraudes ---
 
     @Test
     public void testTotalFraudesGestionnaireVide() {
         assertEquals(0, stats.calculerTotalFraudes());
     }
+
 
     @Test
     public void testTotalFraudesAvecUneFraude() {
@@ -34,33 +34,36 @@ public class StatistiquesTest {
         assertEquals(1, stats.calculerTotalFraudes());
     }
 
+
     @Test
     public void testTotalFraudesAvecPlusieursFormulaires() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
+
         assertEquals(5, stats.calculerTotalFraudes());
     }
 
-    // --- getNbFormulaires ---
 
     @Test
     public void testNbFormulairesVide() {
         assertEquals(0, stats.getNbFormulaires());
     }
 
+
     @Test
     public void testNbFormulairesApresAjout() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
+
         assertEquals(2, stats.getNbFormulaires());
     }
 
-    // --- getNbEtudiantsDistinct ---
 
     @Test
     public void testNbEtudiantsDistinctsVide() {
         assertEquals(0, stats.getNbEtudiantsDistinct());
     }
+
 
     @Test
     public void testNbEtudiantsDistinctsSansDoublon() {
@@ -71,12 +74,13 @@ public class StatistiquesTest {
         f2.ajouterEtudiant(new Etudiant(2, "B", "B", Cursus.E2));
         gestionnaire.ajouterFormulaire(f1);
         gestionnaire.ajouterFormulaire(f2);
+
         assertEquals(2, stats.getNbEtudiantsDistinct());
     }
 
+
     @Test
     public void testNbEtudiantsDistinctsAvecDoublon() {
-        // Le même étudiant apparaît dans deux formulaires différents
         Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);
         Etudiant e = new Etudiant(1, "A", "A", Cursus.E1);
         Formulaire f1 = new Formulaire(ep);
@@ -88,50 +92,53 @@ public class StatistiquesTest {
         assertEquals(1, stats.getNbEtudiantsDistinct());
     }
 
-    // --- calculerMoyenneFraudesParFormulaire ---
 
     @Test
     public void testMoyenneGestionnaireVide() {
         assertEquals(0.0, stats.calculerMoyenneFraudesParFormulaire());
     }
 
+
     @Test
     public void testMoyenneUnFormulaire() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+
         assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
     }
+
 
     @Test
     public void testMoyennePlusieursFormulaires() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
+
         assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
     }
 
-    // --- calculerEcartType ---
 
     @Test
     public void testEcartTypeVide() {
         assertEquals(0.0, stats.calculerEcartType());
     }
 
+
     @Test
     public void testEcartTypeFormulairesIdentiques() {
-        // Même nombre de fraudes dans chaque formulaire -> écart-type = 0
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+
         assertEquals(0.0, stats.calculerEcartType());
     }
+
 
     @Test
     public void testEcartTypeFormulairesDifferents() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
-        // moyenne = 2, écart-type = sqrt(((1-2)²+(3-2)²)/2) = 1.0
+
         assertEquals(1.0, stats.calculerEcartType(), 0.0001);
     }
 
-    // --- Méthode utilitaire ---
 
     private Formulaire creerFormulaireAvecFraudes(int nbFraudes) {
         Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);

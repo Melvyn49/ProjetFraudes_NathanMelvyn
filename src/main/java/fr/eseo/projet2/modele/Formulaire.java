@@ -59,11 +59,21 @@ public class Formulaire {
         this.dateModification = LocalDate.now();
     }
 
-    // Getters
-    public int getId() { return id; }
-    public Epreuve getEpreuve() { return epreuve; }
-    public List<Etudiant> getEtudiants() { return etudiants; }
-    public List<Fraude> getFraudes() { return fraudes; }
+    public int getId() {
+        return id;
+    }
+
+    public Epreuve getEpreuve() {
+        return epreuve;
+    }
+
+    public List<Etudiant> getEtudiants() {
+        return etudiants;
+    }
+
+    public List<Fraude> getFraudes() {
+        return fraudes;
+    }
 
     /**
      * @brief Réinitialise le compteur d'identifiant
@@ -74,7 +84,6 @@ public class Formulaire {
 
     @Override
     public String toString() {
-        return "Formulaire n°" + id + " | Épreuve : " + (epreuve != null ? epreuve.getCodeECUE() : "N/A") +
-                " | Étudiants : " + etudiants.size() + " | Fraudes : " + fraudes.size();
+        return "Formulaire n°" + id + " | Épreuve : " + (epreuve != null ? epreuve.getCodeECUE() : "N/A") + " | Étudiants : " + etudiants.size() + " | Fraudes : " + fraudes.size();
     }
 }
