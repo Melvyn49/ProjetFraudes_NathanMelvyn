@@ -1,16 +1,10 @@
 package fr.eseo.projet2.stats;
 
 import fr.eseo.projet2.gestionnaire.GestionnaireFormulaires;
-import fr.eseo.projet2.modele.Cursus;
-import fr.eseo.projet2.modele.Epreuve;
-import fr.eseo.projet2.modele.Etudiant;
-import fr.eseo.projet2.modele.Formulaire;
-import fr.eseo.projet2.modele.FraudePapier;
-import fr.eseo.projet2.modele.Modalite;
+import fr.eseo.projet2.modele.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -21,43 +15,130 @@ public class StatistiquesTest {
 
     @BeforeEach
     public void preparation() {
+        Formulaire.resetCompteur();
         gestionnaire = new GestionnaireFormulaires();
         stats = new Statistiques(gestionnaire);
     }
 
+    // --- calculerTotalFraudes ---
+
     @Test
-    public void testZeroFraudeAuDemarrage() {
-        // Au début, le gestionnaire est vide, donc le total doit être 0
-        assertEquals(0, stats.calculerTotalFraudes(), "Le total des fraudes devrait être 0 au démarrage.");
+    public void testTotalFraudesGestionnaireVide() {
+        assertEquals(0, stats.calculerTotalFraudes());
     }
 
     @Test
-    public void testCalculerTotalFraudesAvecUneFraude() {
-        // 1. Préparation d'un faux dossier
-        Epreuve epreuve = new Epreuve("Exam Test", LocalDate.now(), LocalTime.of(8, 0), 120, Modalite.EXAMEN_ECRIT);
-        Formulaire formulaire = new Formulaire(epreuve);
-
-        Etudiant etudiant = new Etudiant(1, "Test", "User", Cursus.E3E);
-        formulaire.ajouterEtudiant(etudiant);
-
-        FraudePapier fraude = new FraudePapier(LocalDate.now(), "Triche", "Preuve", "10x10", false);
-        formulaire.ajouterFraude(fraude);
-
-        gestionnaire.ajouterFormulaire(formulaire);
-
-        assertEquals(1, stats.calculerTotalFraudes(), "Le total des fraudes devrait être de 1.");
+    public void testTotalFraudesAvecUneFraude() {
+        Formulaire f = creerFormulaireAvecFraudes(1);
+        gestionnaire.ajouterFormulaire(f);
+        assertEquals(1, stats.calculerTotalFraudes());
     }
 
     @Test
-    public void testCalculerMoyenneFraudes() {
-        Epreuve epreuve = new Epreuve("Exam Test", LocalDate.now(), LocalTime.of(8, 0), 120, Modalite.EXAMEN_ECRIT);
-        Formulaire formulaire = new Formulaire(epreuve);
-        FraudePapier fraude = new FraudePapier(LocalDate.now(), "Triche", "Preuve", "10x10", false);
+    public void testTotalFraudesAvecPlusieursFormulaires() {
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
+        assertEquals(5, stats.calculerTotalFraudes());
+    }
 
-        formulaire.ajouterFraude(fraude);
-        gestionnaire.ajouterFormulaire(formulaire);
+    // --- getNbFormulaires ---
 
-        // MOyenne vraiment utile ??
-        assertEquals(1.0, stats.calculerMoyenneFraudesParFormulaire(), "La moyenne devrait être de 1.0.");
+    @Test
+    public void testNbFormulairesVide() {
+        assertEquals(0, stats.getNbFormulaires());
+    }
+
+    @Test
+    public void testNbFormulairesApresAjout() {
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
+        assertEquals(2, stats.getNbFormulaires());
+    }
+
+    // --- getNbEtudiantsDistinct ---
+
+    @Test
+    public void testNbEtudiantsDistinctsVide() {
+        assertEquals(0, stats.getNbEtudiantsDistinct());
+    }
+
+    @Test
+    public void testNbEtudiantsDistinctsSansDoublon() {
+        Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);
+        Formulaire f1 = new Formulaire(ep);
+        Formulaire f2 = new Formulaire(ep);
+        f1.ajouterEtudiant(new Etudiant(1, "A", "A", Cursus.E1));
+        f2.ajouterEtudiant(new Etudiant(2, "B", "B", Cursus.E2));
+        gestionnaire.ajouterFormulaire(f1);
+        gestionnaire.ajouterFormulaire(f2);
+        assertEquals(2, stats.getNbEtudiantsDistinct());
+    }
+
+    @Test
+    public void testNbEtudiantsDistinctsAvecDoublon() {
+        // Le même étudiant apparaît dans deux formulaires différents
+        Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);
+        Etudiant e = new Etudiant(1, "A", "A", Cursus.E1);
+        Formulaire f1 = new Formulaire(ep);
+        Formulaire f2 = new Formulaire(ep);
+        f1.ajouterEtudiant(e);
+        f2.ajouterEtudiant(e);
+        gestionnaire.ajouterFormulaire(f1);
+        gestionnaire.ajouterFormulaire(f2);
+        assertEquals(1, stats.getNbEtudiantsDistinct());
+    }
+
+    // --- calculerMoyenneFraudesParFormulaire ---
+
+    @Test
+    public void testMoyenneGestionnaireVide() {
+        assertEquals(0.0, stats.calculerMoyenneFraudesParFormulaire());
+    }
+
+    @Test
+    public void testMoyenneUnFormulaire() {
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
+    }
+
+    @Test
+    public void testMoyennePlusieursFormulaires() {
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
+        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
+    }
+
+    // --- calculerEcartType ---
+
+    @Test
+    public void testEcartTypeVide() {
+        assertEquals(0.0, stats.calculerEcartType());
+    }
+
+    @Test
+    public void testEcartTypeFormulairesIdentiques() {
+        // Même nombre de fraudes dans chaque formulaire -> écart-type = 0
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
+        assertEquals(0.0, stats.calculerEcartType());
+    }
+
+    @Test
+    public void testEcartTypeFormulairesDifferents() {
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
+        gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
+        // moyenne = 2, écart-type = sqrt(((1-2)²+(3-2)²)/2) = 1.0
+        assertEquals(1.0, stats.calculerEcartType(), 0.0001);
+    }
+
+    // --- Méthode utilitaire ---
+
+    private Formulaire creerFormulaireAvecFraudes(int nbFraudes) {
+        Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);
+        Formulaire f = new Formulaire(ep);
+        for (int i = 0; i < nbFraudes; i++) {
+            f.ajouterFraude(new FraudePapier(LocalDate.now(), "Triche", "Preuve", "10x10", false));
+        }
+        return f;
     }
 }
