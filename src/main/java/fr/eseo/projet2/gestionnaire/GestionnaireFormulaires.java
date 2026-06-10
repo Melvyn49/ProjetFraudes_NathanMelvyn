@@ -28,7 +28,7 @@ public class GestionnaireFormulaires {
      */
     public GestionnaireFormulaires(List<Formulaire> formulaires) {
         this.formulaires = formulaires;
-        this.epreuves = new ArrayList<>(); // AJOUTÉ
+        this.epreuves = new ArrayList<>();
     }
 
     /**
@@ -53,7 +53,7 @@ public class GestionnaireFormulaires {
      * @param numero Le numéro apprenant de l'étudiant.
      * @return L'objet Etudiant s'il est trouvé, null sinon.
      */
-    public Etudiant rechercherParNumeroApprenant(int numero) { // RENOMMÉ
+    public Etudiant rechercherParNumeroApprenant(int numero) {
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
                 if (e.getNumeroApprenant() == numero) {
@@ -69,7 +69,7 @@ public class GestionnaireFormulaires {
      * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
      * @return La liste des formulaires correspondants.
      */
-    public List<Formulaire> rechercherParEtudiant(int numeroApprenant) { // RENOMMÉ
+    public List<Formulaire> rechercherParEtudiant(int numeroApprenant) {
         List<Formulaire> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
