@@ -8,7 +8,7 @@ import java.time.LocalDate;
  */
 public class FraudePapier extends Fraude {
     private String dimensions;
-    private boolean pile; // ou estPliee selon le diagramme
+    private boolean pile;
 
     public FraudePapier() {
         super();

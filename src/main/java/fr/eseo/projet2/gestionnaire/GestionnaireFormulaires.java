@@ -4,7 +4,6 @@ import fr.eseo.projet2.modele.Etudiant;
 import fr.eseo.projet2.modele.Formulaire;
 import fr.eseo.projet2.graphe.GrapheFraude;
 import fr.eseo.projet2.modele.Epreuve;
-import fr.eseo.projet2.stats.Statistiques;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +13,12 @@ import java.util.List;
  */
 public class GestionnaireFormulaires {
     private List<Formulaire> formulaires;
-    private List<Epreuve> epreuves; // AJOUTÉ
+    private List<Epreuve> epreuves;
 
     /** @brief Constructeur par défaut. */
     public GestionnaireFormulaires() {
         this.formulaires = new ArrayList<>();
-        this.epreuves = new ArrayList<>(); // AJOUTÉ
+        this.epreuves = new ArrayList<>();
     }
 
     /**
@@ -87,7 +86,7 @@ public class GestionnaireFormulaires {
      * @param codeECUE Le code de l'épreuve recherchée.
      * @return La liste des formulaires correspondants.
      */
-    public List<Formulaire> rechercherParEpreuve(String codeECUE) { // RENOMMÉ
+    public List<Formulaire> rechercherParEpreuve(String codeECUE) {
         List<Formulaire> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             if (f.getEpreuve() != null && f.getEpreuve().getCodeECUE().equals(codeECUE)) {
@@ -145,10 +144,6 @@ public class GestionnaireFormulaires {
 
     public List<Epreuve> getEpreuves() {
         return epreuves;
-    }
-
-    public Statistiques calculerStatistiques() {
-        return new Statistiques(this);
     }
 
     /**

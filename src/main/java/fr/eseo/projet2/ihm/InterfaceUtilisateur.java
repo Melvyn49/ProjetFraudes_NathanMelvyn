@@ -51,7 +51,7 @@ public class InterfaceUtilisateur {
                     afficherRechercheMenu();
                     break;
                 case "6":
-                    retirerFormulaireInteractif(); // L'appel manquait ici !
+                    retirerFormulaireInteractif();
                     break;
                 case "7":
                     System.out.println("\n Fermeture du programme ");
@@ -76,14 +76,13 @@ public class InterfaceUtilisateur {
     }
 
     private void creerFormulaireInteractif() {
-        System.out.println("\n--- CRÉATION D'UN NOUVEAU DOSSIER ---");
+        System.out.println("\nCRÉATION D'UN NOUVEAU DOSSIER :");
 
         System.out.print("Nom de l'étudiant suspecté : ");
         String nom = scanner.nextLine();
         System.out.print("Prénom de l'étudiant : ");
         String prenom = scanner.nextLine();
 
-        // Réintégration de la vraie sélection d'épreuve qui avait été écrasée
         if (gestionnaire.getEpreuves().isEmpty()) {
             System.out.println("\nErreur : Aucune épreuve disponible dans le système ! Impossible de créer un dossier.");
             return;
@@ -159,11 +158,11 @@ public class InterfaceUtilisateur {
     private void afficherStatistiques() {
         System.out.println("\n STATISTIQUES DES FRAUDES ");
         Statistiques stats = new Statistiques(gestionnaire);
-        System.out.println("Nombre de formulaires      : " + stats.getNbFormulaires());
-        System.out.println("Étudiants distincts        : " + stats.getNbEtudiantsDistinct());
-        System.out.println("Total fraudes              : " + stats.calculerTotalFraudes());
+        System.out.println("Nombre de formulaires : " + stats.getNbFormulaires());
+        System.out.println("Étudiants distincts : " + stats.getNbEtudiantsDistinct());
+        System.out.println("Total fraudes : " + stats.calculerTotalFraudes());
         System.out.println("Moyenne fraudes/formulaire : " + stats.calculerMoyenneFraudesParFormulaire());
-        System.out.println("Écart-type                 : " + stats.calculerEcartType());
+        System.out.println("Écart-type : " + stats.calculerEcartType());
     }
 
     /**
@@ -188,7 +187,7 @@ public class InterfaceUtilisateur {
 
             System.out.println("  Preuves de fraude :");
             for (Fraude fraude : f.getFraudes()) {
-                System.out.println("    - " + fraude.afficher());
+                System.out.println("  - " + fraude.afficher());
             }
         }
     }
@@ -199,7 +198,7 @@ public class InterfaceUtilisateur {
     }
 
     private void afficherRechercheMenu() {
-        System.out.println("\n--- RECHERCHE ---");
+        System.out.println("\nRECHERCHE :");
         System.out.println("1. Formulaires d'un étudiant (par numéro apprenant)");
         System.out.println("2. Formulaires d'une épreuve (par code ECUE)");
         System.out.println("3. Étudiant par nom");
@@ -270,7 +269,7 @@ public class InterfaceUtilisateur {
     }
 
     private void retirerFormulaireInteractif() {
-        System.out.println("\n--- RETRAIT D'UN DOSSIER ---");
+        System.out.println("\nRETRAIT D'UN DOSSIER :");
         if (gestionnaire.getFormulaires().isEmpty()) {
             System.out.println("Aucun dossier enregistré pour le moment.");
             return;
@@ -291,7 +290,7 @@ public class InterfaceUtilisateur {
                 System.out.println("-> Erreur : Aucun formulaire trouvé avec cet identifiant.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("-> Erreur : Veuillez saisir un nombre valide.");
+            System.out.println("Erreur : Veuillez saisir un nombre valide.");
         }
     }
 }
