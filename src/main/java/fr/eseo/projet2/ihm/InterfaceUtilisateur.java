@@ -58,7 +58,7 @@ public class InterfaceUtilisateur {
                     continuer = false;
                     break;
                 default:
-                    System.out.println("\n Erreur : Choix invalide. Veuillez taper un nombre entre 1 et 7.");
+                    System.out.println("\n Erreur : Choix invalide. Veuillez taper un chiffre entre 1 et 7.");
             }
         }
     }
