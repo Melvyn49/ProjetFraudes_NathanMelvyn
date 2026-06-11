@@ -20,50 +20,43 @@ public class StatistiquesTest {
         stats = new Statistiques(gestionnaire);
     }
 
-
     @Test
     public void testTotalFraudesGestionnaireVide() {
-        assertEquals(0, stats.calculerTotalFraudes());
+        assertEquals(0, stats.calculerTotalFraudes(), "Le total des fraudes doit être 0 lorsque le gestionnaire est vide.");
     }
-
 
     @Test
     public void testTotalFraudesAvecUneFraude() {
         Formulaire f = creerFormulaireAvecFraudes(1);
         gestionnaire.ajouterFormulaire(f);
-        assertEquals(1, stats.calculerTotalFraudes());
+        assertEquals(1, stats.calculerTotalFraudes(), "Le total des fraudes doit être 1 après l'ajout d'un formulaire contenant exactement une fraude.");
     }
-
 
     @Test
     public void testTotalFraudesAvecPlusieursFormulaires() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
 
-        assertEquals(5, stats.calculerTotalFraudes());
+        assertEquals(5, stats.calculerTotalFraudes(), "Le total doit correspondre à la somme exacte des fraudes de tous les formulaires (2 + 3 = 5).");
     }
-
 
     @Test
     public void testNbFormulairesVide() {
-        assertEquals(0, stats.getNbFormulaires());
+        assertEquals(0, stats.getNbFormulaires(), "Le nombre de formulaires doit être 0 à l'initialisation du gestionnaire.");
     }
-
 
     @Test
     public void testNbFormulairesApresAjout() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
 
-        assertEquals(2, stats.getNbFormulaires());
+        assertEquals(2, stats.getNbFormulaires(), "Le nombre de formulaires doit être 2 après l'ajout de deux dossiers distincts.");
     }
-
 
     @Test
     public void testNbEtudiantsDistinctsVide() {
-        assertEquals(0, stats.getNbEtudiantsDistinct());
+        assertEquals(0, stats.getNbEtudiantsDistinct(), "Le nombre d'étudiants distincts doit être 0 quand aucun formulaire n'est enregistré.");
     }
-
 
     @Test
     public void testNbEtudiantsDistinctsSansDoublon() {
@@ -75,9 +68,8 @@ public class StatistiquesTest {
         gestionnaire.ajouterFormulaire(f1);
         gestionnaire.ajouterFormulaire(f2);
 
-        assertEquals(2, stats.getNbEtudiantsDistinct());
+        assertEquals(2, stats.getNbEtudiantsDistinct(), "Le compteur doit trouver 2 étudiants distincts lorsqu'ils ont des numéros apprenants différents.");
     }
-
 
     @Test
     public void testNbEtudiantsDistinctsAvecDoublon() {
@@ -89,56 +81,50 @@ public class StatistiquesTest {
         f2.ajouterEtudiant(e);
         gestionnaire.ajouterFormulaire(f1);
         gestionnaire.ajouterFormulaire(f2);
-        assertEquals(1, stats.getNbEtudiantsDistinct());
-    }
 
+        assertEquals(1, stats.getNbEtudiantsDistinct(), "Le compteur doit trouver 1 seul étudiant distinct si le même étudiant est impliqué dans plusieurs formulaires.");
+    }
 
     @Test
     public void testMoyenneGestionnaireVide() {
-        assertEquals(0.0, stats.calculerMoyenneFraudesParFormulaire());
+        assertEquals(0.0, stats.calculerMoyenneFraudesParFormulaire(), "La moyenne doit être 0.0 (et éviter une division par zéro) lorsque le gestionnaire est vide.");
     }
-
 
     @Test
     public void testMoyenneUnFormulaire() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
 
-        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
+        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire(), "La moyenne doit être égale au nombre de fraudes du seul formulaire présent (2 / 1 = 2.0).");
     }
-
 
     @Test
     public void testMoyennePlusieursFormulaires() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
 
-        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire());
+        assertEquals(2.0, stats.calculerMoyenneFraudesParFormulaire(), "La moyenne doit être calculée correctement sur l'ensemble des formulaires ((1 + 3) / 2 = 2.0).");
     }
-
 
     @Test
     public void testEcartTypeVide() {
-        assertEquals(0.0, stats.calculerEcartType());
+        assertEquals(0.0, stats.calculerEcartType(), "L'écart-type doit être 0.0 si aucun formulaire n'est présent.");
     }
-
 
     @Test
     public void testEcartTypeFormulairesIdentiques() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(2));
 
-        assertEquals(0.0, stats.calculerEcartType());
+        assertEquals(0.0, stats.calculerEcartType(), "L'écart-type doit être nul si tous les formulaires ont exactement le même nombre de fraudes (aucune dispersion).");
     }
-
 
     @Test
     public void testEcartTypeFormulairesDifferents() {
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(1));
         gestionnaire.ajouterFormulaire(creerFormulaireAvecFraudes(3));
 
-        assertEquals(1.0, stats.calculerEcartType(), 0.0001);
+        assertEquals(1.0, stats.calculerEcartType(), 0.0001, "L'écart-type doit refléter la dispersion correcte autour de la moyenne.");
     }
-
 
     private Formulaire creerFormulaireAvecFraudes(int nbFraudes) {
         Epreuve ep = new Epreuve("TEST", LocalDate.now(), LocalTime.of(8, 0), 60, Modalite.EXAMEN_ECRIT);
