@@ -68,7 +68,7 @@ public class GestionnaireFormulaires {
      * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
      * @return La liste des formulaires correspondants.
      */
-    public List<Formulaire> rechercherParEtudiant(int numeroApprenant) {
+    public List<Formulaire> rechercherParEtudiant(int numeroApprenant) {  //recherche tous les dossiers dans lesquels un étudiant est impliqué
         List<Formulaire> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {

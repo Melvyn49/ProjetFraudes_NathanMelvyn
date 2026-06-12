@@ -50,13 +50,28 @@ public class Etudiant {
     }
 
     /**
-     * @brief Redéfinition de equals basée sur le numéro apprenant (unique).
+     * @brief Redéfinition de equals basée sur le numéro apprenant
      */
+
     @Override
     public boolean equals(Object o) {
+        // 1. OPTIMISATION : Est-ce qu'on compare l'objet avec lui-même ?
+        // Si c'est exactement la même "boîte" en mémoire, on gagne du temps, c'est forcément vrai.
         if (this == o) return true;
+
+        // 2. SÉCURITÉ : L'objet est-il vide ou d'une famille différente ?
+        // Si on compare avec du vide (null) ou avec une autre classe (ex: une Fraude),
+        // c'est impossible qu'ils soient égaux, donc on renvoie faux direct.
         if (o == null || getClass() != o.getClass()) return false;
+
+        // 3. CASTING : On met l'étiquette "Etudiant"
+        // À ce stade, on est sûr que l'objet 'o' est bien un Etudiant, mais Java le voit
+        // toujours comme un objet générique. On le "transforme" (cast) pour pouvoir lire ses attributs.
         Etudiant etudiant = (Etudiant) o;
+
+        // 4. LA VRAIE COMPARAISON
+        // Maintenant qu'on a accès aux infos, on vérifie si le numéro apprenant de notre
+        // étudiant courant (this) est le même que celui de l'étudiant qu'on nous a passé en paramètre.
         return numeroApprenant == etudiant.numeroApprenant;
     }
 

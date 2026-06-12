@@ -8,7 +8,7 @@ import java.util.List;
  * @class Formulaire
  * @brief Document principal reliant une épreuve, des étudiants et des fraudes.
  */
-public class Formulaire {
+public class Formulaire {  //génère un identifiant unique et automatique pour chaque nouveau dossier
     private static int compteurId = 1;
 
     private int id;
@@ -78,6 +78,7 @@ public class Formulaire {
     /**
      * @brief Réinitialise le compteur d'identifiant
      */
+
     public static void resetCompteur() {
         compteurId = 1;
     }
