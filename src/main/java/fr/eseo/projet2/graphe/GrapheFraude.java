@@ -20,7 +20,7 @@ public class GrapheFraude {
         this.adjacence = new HashMap<>();
     }
 
-    public void construire(List<Formulaire> formulaires) {
+    public void construireCombinaisons(List<Formulaire> formulaires) {
         adjacence.clear();
 
         for (Formulaire f : formulaires) {
@@ -48,14 +48,14 @@ public class GrapheFraude {
         ajouterSommet(a);
         ajouterSommet(b);
 
-        if (!a.equals(b)) {
+        if (!a.equals(b)) { // empêche un etudiant de tricher avec lui même
             adjacence.get(a).add(b);
             adjacence.get(b).add(a);
         }
     }
 
     public void afficher() {
-        System.out.println("\n--- RÉSEAU DE PLAGIAT POTENTIEL ---");
+        System.out.println("\nRéseau de plagiat potentiel :");
 
         if (adjacence.isEmpty()) {
             System.out.println("Aucun étudiant suspecté dans la base.");

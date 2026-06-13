@@ -22,15 +22,6 @@ public class GestionnaireFormulaires {
     }
 
     /**
-     * @brief Constructeur avec liste existante.
-     * @param formulaires Une liste pré-existante de formulaires.
-     */
-    public GestionnaireFormulaires(List<Formulaire> formulaires) {
-        this.formulaires = formulaires;
-        this.epreuves = new ArrayList<>();
-    }
-
-    /**
      * @brief Ajoute un nouveau formulaire à la liste.
      * @param f Le formulaire à ajouter.
      */
@@ -52,7 +43,7 @@ public class GestionnaireFormulaires {
      * @param numero Le numéro apprenant de l'étudiant.
      * @return L'objet Etudiant s'il est trouvé, null sinon.
      */
-    public Etudiant rechercherParNumeroApprenant(int numero) {
+    public Etudiant rechercherEtudiantParNumeroApprenant(int numero) {
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
                 if (e.getNumeroApprenant() == numero) {
@@ -68,7 +59,7 @@ public class GestionnaireFormulaires {
      * @param numeroApprenant Le numéro apprenant de l'étudiant recherché.
      * @return La liste des formulaires correspondants.
      */
-    public List<Formulaire> rechercherParEtudiant(int numeroApprenant) {  //recherche tous les dossiers dans lesquels un étudiant est impliqué
+    public List<Formulaire> rechercherFormulaireParEtudiant(int numeroApprenant) {
         List<Formulaire> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
@@ -101,7 +92,7 @@ public class GestionnaireFormulaires {
      * @param nom Le nom à rechercher.
      * @return La liste des étudiants correspondants.
      */
-    public List<Etudiant> rechercherParNom(String nom) {
+    public List<Etudiant> rechercherEtudiantParNom(String nom) {
         List<Etudiant> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
@@ -118,7 +109,7 @@ public class GestionnaireFormulaires {
      * @param prenom Le prénom à rechercher.
      * @return La liste des étudiants correspondants.
      */
-    public List<Etudiant> rechercherParPrenom(String prenom) {
+    public List<Etudiant> rechercherEtudiantParPrenom(String prenom) {
         List<Etudiant> resultat = new ArrayList<>();
         for (Formulaire f : formulaires) {
             for (Etudiant e : f.getEtudiants()) {
@@ -152,7 +143,7 @@ public class GestionnaireFormulaires {
      */
     public GrapheFraude construireGraphe() {
         GrapheFraude graphe = new GrapheFraude();
-        graphe.construire(this.formulaires);
+        graphe.construireCombinaisons(this.formulaires);
         return graphe;
     }
 }

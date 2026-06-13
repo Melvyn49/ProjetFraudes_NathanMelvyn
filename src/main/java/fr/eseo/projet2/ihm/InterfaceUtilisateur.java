@@ -7,7 +7,6 @@ import fr.eseo.projet2.modele.Formulaire;
 import fr.eseo.projet2.modele.Fraude;
 import fr.eseo.projet2.modele.Epreuve;
 import fr.eseo.projet2.modele.Cursus;
-import fr.eseo.projet2.modele.Modalite;
 import fr.eseo.projet2.modele.FraudeIAG;
 import fr.eseo.projet2.modele.FraudePapier;
 import fr.eseo.projet2.modele.FraudeCalculatrice;
@@ -94,8 +93,27 @@ public class InterfaceUtilisateur {
             System.out.println(index + ". " + ep.getCodeECUE() + " (" + ep.getModalite() + " - " + ep.getDate() + ")");
             index++;
         }
-        System.out.print("Votre choix (numéro) : ");
-        int choixEpreuve = Integer.parseInt(scanner.nextLine());
+        int choixEpreuve = -1;
+        boolean choixValide = false;
+        int nombreMaxEpreuves = gestionnaire.getEpreuves().size();
+
+        while (!choixValide) {
+            System.out.print("Votre choix (numéro) : ");
+            String entreeUtilisateur = scanner.nextLine();
+
+            try {
+                choixEpreuve = Integer.parseInt(entreeUtilisateur);
+
+                // On vérifie que le chiffre est bien entre 1 et le nombre total d'épreuves
+                if (choixEpreuve >= 1 && choixEpreuve <= nombreMaxEpreuves) {
+                    choixValide = true;
+                } else {
+                    System.out.println("Choix invalide. Veuillez taper un numéro entre 1 et " + nombreMaxEpreuves + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur de saisie. Veuillez taper un chiffre valide.");
+            }
+        }
 
         Epreuve epreuveSelectionnee = gestionnaire.getEpreuves().get(choixEpreuve - 1);
         Formulaire nouveauFormulaire = new Formulaire(epreuveSelectionnee);
@@ -211,7 +229,7 @@ public class InterfaceUtilisateur {
             case "1":
                 System.out.print("Numéro apprenant : ");
                 int numero = Integer.parseInt(scanner.nextLine());
-                List<Formulaire> parEtudiant = gestionnaire.rechercherParEtudiant(numero);
+                List<Formulaire> parEtudiant = gestionnaire.rechercherFormulaireParEtudiant(numero);
                 if (parEtudiant.isEmpty()) {
                     System.out.println("Aucun formulaire trouvé pour ce numéro.");
                 } else {
@@ -233,7 +251,7 @@ public class InterfaceUtilisateur {
             case "3":
                 System.out.print("Nom à rechercher : ");
                 String nom = scanner.nextLine();
-                List<Etudiant> parNom = gestionnaire.rechercherParNom(nom);
+                List<Etudiant> parNom = gestionnaire.rechercherEtudiantParNom(nom);
                 if (parNom.isEmpty()) {
                     System.out.println("Aucun étudiant trouvé avec ce nom.");
                 } else {
@@ -244,7 +262,7 @@ public class InterfaceUtilisateur {
             case "4":
                 System.out.print("Prénom à rechercher : ");
                 String prenom = scanner.nextLine();
-                List<Etudiant> parPrenom = gestionnaire.rechercherParPrenom(prenom);
+                List<Etudiant> parPrenom = gestionnaire.rechercherEtudiantParPrenom(prenom);
                 if (parPrenom.isEmpty()) {
                     System.out.println("Aucun étudiant trouvé avec ce prénom.");
                 } else {
@@ -255,7 +273,7 @@ public class InterfaceUtilisateur {
             case "5":
                 System.out.print("Numéro apprenant : ");
                 int num = Integer.parseInt(scanner.nextLine());
-                Etudiant etudiant = gestionnaire.rechercherParNumeroApprenant(num);
+                Etudiant etudiant = gestionnaire.rechercherEtudiantParNumeroApprenant(num);
                 if (etudiant == null) {
                     System.out.println("Aucun étudiant trouvé avec ce numéro.");
                 } else {

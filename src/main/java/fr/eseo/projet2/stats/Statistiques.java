@@ -3,8 +3,8 @@ package fr.eseo.projet2.stats;
 import fr.eseo.projet2.gestionnaire.GestionnaireFormulaires;
 import fr.eseo.projet2.modele.Etudiant;
 import fr.eseo.projet2.modele.Formulaire;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @class Statistiques
@@ -37,13 +37,20 @@ public class Statistiques {
      * @brief Retourne le nombre d'étudiants distincts impliqués dans au moins un formulaire.
      * @return Le nombre d'étudiants uniques.
      */
+
     public int getNbEtudiantsDistinct() {
         if (gestionnaire == null) return 0;
-        Set<Etudiant> distincts = new HashSet<>();
+
+        List<Etudiant> etudiantsUniques = new ArrayList<>();
+
         for (Formulaire f : gestionnaire.getFormulaires()) {
-            distincts.addAll(f.getEtudiants());
+            for (Etudiant e : f.getEtudiants()) {
+                if (!etudiantsUniques.contains(e)) {
+                    etudiantsUniques.add(e);
+                }
+            }
         }
-        return distincts.size();
+        return etudiantsUniques.size();
     }
 
     /**
