@@ -8,27 +8,28 @@ import java.time.LocalDate;
  */
 public class FraudePapier extends Fraude {
     private String dimensions;
-    private boolean pile;
+    private boolean plie;
 
     public FraudePapier() {
         super();
     }
 
-    public FraudePapier(LocalDate dateReleve, String description, String contenu, String dimensions, boolean pile) {
+    public FraudePapier(LocalDate dateReleve, String description, String contenu, String dimensions, boolean plie) {
         super(dateReleve, description, contenu);
         this.dimensions = dimensions;
-        this.pile = pile;
+        this.plie = plie;
     }
 
     public String getDimensions() {
         return dimensions;
     }
-    public boolean isPile() {
-        return pile;
+
+    public boolean isPlie() {
+        return plie;
     }
 
     @Override
     public String afficher() {
-        return toString() + " | Dimensions : " + dimensions + " | Plié : " + pile;
+        return toString() + " | Dimensions : " + dimensions + " | Plié : " + (plie ? "Oui" : "Non");
     }
 }

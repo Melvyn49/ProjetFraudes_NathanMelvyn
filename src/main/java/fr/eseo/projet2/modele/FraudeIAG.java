@@ -6,6 +6,7 @@ import java.time.LocalDate;
  * @class FraudeIAG
  * @brief Spécialisation d'une fraude impliquant un service d'Intelligence Artificielle Générative.
  */
+
 public class FraudeIAG extends Fraude {
     private String nomService;
 

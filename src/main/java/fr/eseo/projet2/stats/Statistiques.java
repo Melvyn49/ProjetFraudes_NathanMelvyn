@@ -13,9 +13,6 @@ import java.util.ArrayList;
 public class Statistiques {
     private GestionnaireFormulaires gestionnaire;
 
-    /** @brief Constructeur par défaut. */
-    public Statistiques() {}
-
     /**
      * @brief Constructeur liant les statistiques au gestionnaire de données.
      * @param gestionnaire Le gestionnaire contenant les formulaires à analyser.
@@ -70,8 +67,8 @@ public class Statistiques {
      * @brief Calcule la moyenne du nombre de fraudes par formulaire.
      * @return La moyenne sous forme de nombre décimal.
      */
-    public double calculerMoyenneFraudesParFormulaire() {
-        if (gestionnaire == null || gestionnaire.getFormulaires().isEmpty()) return 0.0;
+    public double calculerMoyenneFraudesParFormulaire() { //double permet le resultat decimal
+        if (gestionnaire == null || gestionnaire.getFormulaires().isEmpty()) return 0.0;  //On ne divise pas par 0
         return (double) calculerTotalFraudes() / gestionnaire.getFormulaires().size();
     }
 

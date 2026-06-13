@@ -1,10 +1,12 @@
 package fr.eseo.projet2.modele;
+
 import java.time.LocalDate;
 
 /**
  * @class FraudeIAGConnectee
  * @brief Spécialisation d'une fraude IAG impliquant un accès réseau.
  */
+
 public class FraudeIAGConnectee extends FraudeIAG {
     private String adresseIP;
 
