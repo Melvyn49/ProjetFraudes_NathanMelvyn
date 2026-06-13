@@ -295,7 +295,21 @@ public class InterfaceUtilisateur {
 
         System.out.println("Liste des dossiers actuels :");
         for (Formulaire f : gestionnaire.getFormulaires()) {
-            System.out.println("- ID: " + f.getId() + " | Épreuve: " + f.getEpreuve().getCodeECUE());
+
+            System.out.print("- ID: " + f.getId() + " | Épreuve: " + f.getEpreuve().getCodeECUE() + " | Étudiant(s) : ");
+
+            List<Etudiant> suspects = f.getEtudiants();
+
+            for (int i = 0; i < suspects.size(); i++) {
+                Etudiant e = suspects.get(i);
+                System.out.print(e.getPrenom() + " " + e.getNom());
+
+                // Si c'est pas le dernier étudiant on ajoute une virgule pour lisibilité
+                if (i < suspects.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
         }
 
         System.out.print("\nSaisissez l'ID du formulaire à retirer : ");
